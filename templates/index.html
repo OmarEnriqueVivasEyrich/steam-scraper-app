@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Scraping Steam</title>
+    <title>Extracción de URLs de Steam</title>
 </head>
 <body>
     <h1>Extracción de URLs de Steam</h1>
-    <button onclick="iniciarScraping()">Iniciar scraping</button>
-    <pre id="salida" style="background:#f4f4f4; padding:10px; border:1px solid #ccc;"></pre>
+    <form method="POST">
+        <button type="submit">Iniciar scraping</button>
+    </form>
 
-    <script>
-        function iniciarScraping() {
-            const salida = document.getElementById("salida");
-            salida.textContent = "";
-            fetch("/scrape")
-                .then(response => {
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder();
-                    function leer() {
-                        reader.read().then(({ done, value }) => {
-                            if (done) return;
-                            salida.textContent += decoder.decode(value);
-                            leer();
-                        });
-                    }
-                    leer();
-                });
-        }
-    </script>
+    {% if urls %}
+        <h2>Resultados:</h2>
+        <ul>
+            {% for url in urls %}
+                <li><a href="{{ url }}" target="_blank">{{ url }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </body>
 </html>
